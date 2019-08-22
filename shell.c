@@ -22,9 +22,16 @@ int parseCommand(char* input, char** parsedCommand)
 int main(){
     char input[maxInput];
     char *parsedCommand[maxInput];
-    int x=parseCommand(input,parsedCommand);
-    // for(int i=0; i<x; i++){
-    //     printf("%s\n",parsedCommand[i]);
-    // }
+    int x;
+    while(1){
+        x=parseCommand(input,parsedCommand);
+        for(int i=0; i<x; i++){
+            printf("%s\n",parsedCommand[i]);
+        }
+        if(x==1 && strcmp(parsedCommand[0],"exit\n")==0){
+            break;
+        }
+        execMyCommand(parsedCommand);
+    }
     return 0;
 }
