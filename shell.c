@@ -10,9 +10,9 @@ int parseCommand(char* input, char** parsedCommand)
 {
     takeInput(input);
     int i;
-    for (i=0; i<maxInput; i++){
+    for(i=0; i<maxInput; i++){
         parsedCommand[i]=strsep(&input, " ");
-        if (parsedCommand[i]==NULL){
+        if(parsedCommand[i]==NULL){
             break;
         }
     }
