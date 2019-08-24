@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <string.h>
 #define maxInput 1000
 void takeInput(char *input){
@@ -16,8 +18,28 @@ int parseCommand(char* input, char** parsedCommand)
             break;
         }
     }
+    int tempSize=strlen(parsedCommand[i-1]);
+    parsedCommand[i-1][tempSize-1]='\0';
     return i;
 }
+
+void execCommand(char **parsedCommand, int size){
+    int pid;
+    int status;
+    pid=fork();
+    if(pid==0){
+        status=execvp(parsedCommand[0],parsedCommand);
+        if(status==-1){
+            execInternalCommand(parsedCommand,size);
+        }
+        exit(0);
+    }
+    else{
+        wait(NULL);
+    }
+}
+
+
 
 int main(){
     char input[maxInput];
@@ -25,13 +47,13 @@ int main(){
     int x;
     while(1){
         x=parseCommand(input,parsedCommand);
-        for(int i=0; i<x; i++){
-            printf("%s\n",parsedCommand[i]);
-        }
-        if(x==1 && strcmp(parsedCommand[0],"exit\n")==0){
+        // for(int i=0; i<x; i++){
+        //     printf("%s",parsedCommand[i]);
+        // }
+        if(x==1 && strcmp(parsedCommand[0],"exit")==0){
             break;
         }
-        execMyCommand(parsedCommand);
+        execCommand(parsedCommand,x);
     }
     return 0;
 }
