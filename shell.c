@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include "shell.h"
 #define maxInput 1000
 void takeInput(char *input){
     printf(">>");
@@ -39,21 +40,6 @@ void execCommand(char **parsedCommand, int size){
     }
 }
 
-
-
-int main(){
-    char input[maxInput];
-    char *parsedCommand[maxInput];
-    int x;
-    while(1){
-        x=parseCommand(input,parsedCommand);
-        // for(int i=0; i<x; i++){
-        //     printf("%s",parsedCommand[i]);
-        // }
-        if(x==1 && strcmp(parsedCommand[0],"exit")==0){
-            break;
-        }
-        execCommand(parsedCommand,x);
-    }
-    return 0;
+void execInternalCommand(char **parsedCommand, int size){
+    
 }
