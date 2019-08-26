@@ -10,9 +10,6 @@ int main(){
     int x;
     while(1){
         x=parseCommand(input,parsedCommand);
-        // for(int i=0; i<x; i++){
-        //     printf("%s",parsedCommand[i]);
-        // }
         if(x==1 && strcmp(parsedCommand[0],"exit")==0){
             break;
         }
