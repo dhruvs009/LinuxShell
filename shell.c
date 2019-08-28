@@ -2,13 +2,24 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "shell.h"
 #define maxInput 1000
+char path[maxInput];
+int count=0;
 void takeInput(char *input){
     FILE *filePointer;
-    printf(">>");
+    char cwd[maxInput];
+    getcwd(cwd,maxInput);
+    printf("%s >>",cwd);
     fgets(input,maxInput,stdin);
-    filePointer=fopen(".history","a+");
+    if(count==0){    
+        getcwd(path,maxInput);
+        strcat(path,"/.history");
+    }
+    count++;
+    filePointer=fopen(path,"a+");
     fputs(input,filePointer);
     fclose(filePointer);
 }
@@ -28,13 +39,15 @@ int parseCommand(char* input, char** parsedCommand){
 }
 
 void execCommand(char **parsedCommand, int size){  //needs all cases for particular commands else the program never reaches execInternalCommand or put execInternalCommand first. Take a look.
-    int pid;
     int status=0;
     status=execInternalCommand(parsedCommand,size);
     if(status==-1){
-        pid=fork();
+        int pid=fork();
+        char path[maxInput];
+        strcpy(path,"/usr/bin/");
+        strcat(path,parsedCommand[0]);
         if(pid==0){
-            status=execExternalCommand(parsedCommand,size);
+            status=execv(path,parsedCommand);
             if(status==-1){
                 printf("%s does not exist as a command. \n",parsedCommand[0]);
             }
@@ -44,10 +57,6 @@ void execCommand(char **parsedCommand, int size){  //needs all cases for particu
             wait(NULL);
         }
     }
-}
-
-int execExternalCommand(char **parsedCommand, int size){
-    return -1;
 }
 
 int execInternalCommand(char **parsedCommand, int size){
@@ -183,6 +192,9 @@ int echoX(char **parsedCommand, int size){
             printf("%c",(char)'\n');
         }
     }
+    else{
+        printf("No such flag available for echo.");
+    }
     return 0;
 }
 
@@ -201,6 +213,9 @@ int echoPrep(char **parsedCommand, int size){
         else if((strcmp(parsedCommand[1],"-e")==0 || strcmp(parsedCommand[1],"-n")==0) && (strcmp(parsedCommand[2],"-e")==0 || strcmp(parsedCommand[2],"-n")==0)){
             status=4;
         }
+        else if(parsedCommand[1][0]=='-'){
+            status=-1;
+        }
         return status;
     }
     else{
@@ -212,7 +227,7 @@ int printHistory(char **parsedCommand, int size){
     if(size==1){
         FILE *filePointer;
         char dataFromFile[maxInput];
-        filePointer=fopen(".history","r");
+        filePointer=fopen(path,"r");
         int i=0;
         while(fgets(dataFromFile,maxInput,filePointer)!=NULL){
             i++;
