@@ -9,15 +9,15 @@ This is a small implementation of a baic Shell that I made during my Computer Ar
 
 ## Some Implementations: 
 External Commands:
-All external commands whose binaries exist at /usr/bin work with all predefined flags as well. <br><br>
-For echo commands the flags -n and -e can be used with all possible combinations handled for the input. For the 
-cd command the arguments combination have been hadled well (at least one directory is required and not more than one 
-directory can be given at once). pwd command doesn't take any flags or any arguments and suitable error is shown if 
-any of them are given. history command works using file handling (a file is created at execution at the directory where
-the shell executables are located) and this doesn't take any arguments as well. exit works normally (no arguments and 
+All external commands whose binaries exist at `/usr/bin work` with all predefined flags as well. <br><br>
+For echo commands the flags `-n` and `-e` can be used with all possible combinations handled for the input. For the 
+`cd` command the arguments combination have been hadled well (at least one directory is required and not more than one 
+directory can be given at once). `pwd` command doesn't take any flags or any arguments and suitable error is shown if 
+any of them are given. `history` command works using file handling (a file is created at execution at the directory where
+the shell executables are located) and this doesn't take any arguments as well. `exit` works normally (no arguments and 
 must exit the shell). <br>
 
-For the external commands execv(), fork(), and wait() have been used to execute the binaries of the required commands
+For the external commands `execv()`, `fork()`, and `wait()` have been used to execute the binaries of the required commands
 in a child process and show the expected output. In case of any errors, suitable error message is also shown. The external
 commands work with any number of arguments (any number of flags that are available). In case of unexpected or incorrect
 inputs, the shell shows appropriate error messages as well. <br>
